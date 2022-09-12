@@ -1,10 +1,13 @@
+using System;
 using UnityEngine;
 
 namespace TriangleFactory
 {
 	public class Player : MonoBehaviour
 	{
-		[SerializeField] LayerMask _interactionMask;
+        public static event EventHandler OnWeaponEquipped;
+
+        [SerializeField] LayerMask _interactionMask;
 		[SerializeField] Camera _camera;
 		[SerializeField] Transform _weaponLocation;
 
@@ -14,6 +17,7 @@ namespace TriangleFactory
         InputManager inputManagerScript;
 
         bool equippedWeapon;
+        bool countingDown;
 
         const float Radius = 1f;
 		const float FireDistance = 50.0f;
@@ -50,12 +54,19 @@ namespace TriangleFactory
             _weapon.transform.localPosition = Vector3.zero;
             _weapon.transform.localRotation = Quaternion.identity;
             equippedWeapon = true;
+            OnWeaponEquipped?.Invoke(this, EventArgs.Empty);
+            SwitchCountingDownBool();
+            FindObjectOfType<TargetManager>().DisableTargets();
+        }
 
-            // Set off timer
+        public void SwitchCountingDownBool()
+        {
+            countingDown = !countingDown;
         }
 
         void TryShoot()
         {
+            if (countingDown) return;
             if (inputManagerScript.Fire() == false) return;
             if (equippedWeapon == false) return;
 

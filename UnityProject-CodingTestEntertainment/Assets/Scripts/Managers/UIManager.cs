@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using TriangleFactory;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -10,40 +12,85 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI scoreText;
 
     [Header("Timer")]
-    float timerValue = 3f;
+    float timerCountdownValue = 3f;
     float secondsBeforeStart = 3f;
+    float timerGameValue = 60f;
+    float secondsPerRound = 60f;
+    bool startedCountdown;
+    bool startShooting;
 
     [SerializeField] Image countdownImage;
-    [SerializeField] TextMeshProUGUI secondsText;
+    [SerializeField] Image gameTimerImage;
+    [SerializeField] TextMeshProUGUI secondsCountdownText;
+    [SerializeField] TextMeshProUGUI secondsPlayText;
     [SerializeField] TextMeshProUGUI goText;
+
+    void Start()
+    {
+        Player.OnWeaponEquipped += PlayerScript_OnWeaponEquipped;
+    }
 
     void Update()
     {
         UpdateScore();
-        UpdateTimer();
+        UpdateCountdownTimer();
+        UpdateGameTimer();
     }
     void UpdateScore()
     {
         scoreText.text = FindObjectOfType<ScoreManager>().GetScore().ToString("000000000");
     }
 
-    void UpdateTimer()
+    void UpdateCountdownTimer()
     {
-        timerValue -= Time.deltaTime;
-        secondsText.text = Mathf.Round(timerValue).ToString();
+        if (startedCountdown == false) return;
+        timerCountdownValue -= Time.deltaTime;
+        secondsCountdownText.text = Mathf.Round(timerCountdownValue).ToString();
 
-        if (timerValue > 0)
+        if (timerCountdownValue > 0)
         {
-            countdownImage.fillAmount = timerValue / secondsBeforeStart;
+            countdownImage.fillAmount = timerCountdownValue / secondsBeforeStart;
         }
         else
         {
-            goText.gameObject.SetActive(true);
+            StartCoroutine(TurnOffCountdownElements());
         }
     }
 
-    public void CancelTimer()
+    void UpdateGameTimer()
     {
-        timerValue = 0;
+        if (startShooting == false) return;
+        gameTimerImage.gameObject.SetActive(true);
+        timerGameValue -= Time.deltaTime;
+        secondsPlayText.text = Mathf.Round(timerGameValue).ToString();
+
+        if (timerGameValue > 0)
+        {
+            gameTimerImage.fillAmount = timerGameValue / secondsPerRound;
+        }
+        else
+        {
+            startShooting = false;
+        }
+
     }
+
+    IEnumerator TurnOffCountdownElements()
+    {
+        goText.gameObject.SetActive(true);
+        secondsCountdownText.gameObject.SetActive(false);
+        yield return new WaitForSeconds(1);
+        countdownImage.gameObject.SetActive(false);
+        startedCountdown = false;
+        startShooting = true;
+        FindObjectOfType<Player>().SwitchCountingDownBool();
+    }
+
+    void PlayerScript_OnWeaponEquipped(object sender, EventArgs e)
+    {
+        startedCountdown = true;
+        countdownImage.gameObject.SetActive(true);
+    }
+
+    public bool GetStartShootingBool() => startShooting;
 }
