@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
@@ -12,17 +13,33 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip targetHit;
     [SerializeField][Range(0f, 1f)] float targetHitSFXVolume;
 
+    [Header("UI Clicked")]
+    [SerializeField] AudioClip uiClicked;
+    [SerializeField][Range(0f, 1f)] float uiClickedSFXVolume;
+
+    [Header("Bomb Hit")]
+    [SerializeField] AudioClip bombHit;
+    [SerializeField][Range(0f, 1f)] float bomgHitSFXVolume;
+
+    [SerializeField] Slider volumeSlider;
+
+    [SerializeField] AudioSource gameMusic;
+    [SerializeField] AudioSource endMenuMusic;
+
     public static AudioManager Instance { get; private set; }
 
     void Awake()
     {
         if (Instance != null)
         {
-            Debug.LogError("There's more than one AudioManager! " + transform + " - " + Instance);
+            gameObject.SetActive(false);
             Destroy(gameObject);
-            return;
         }
-        Instance = this;
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 
     public void PlayShootingClip()
@@ -30,9 +47,36 @@ public class AudioManager : MonoBehaviour
         PlayClip(shootingSFX, shootingSFXVolume);
     }
 
+    public void PlayUIClickedClip()
+    {
+        PlayClip(uiClicked, uiClickedSFXVolume);
+    }
+
+    public void PlayBombHitClip()
+    {
+        PlayClip(bombHit, bomgHitSFXVolume);
+    }
+
     public void PlayTargetHitClip()
     {
         PlayClip(targetHit, targetHitSFXVolume);
+    }
+
+    public void StartEndMenuMusic()
+    {
+        gameMusic.enabled = false;
+        endMenuMusic.enabled = true;
+    }
+
+    public void StartGameMusic()
+    {
+        gameMusic.enabled = true;
+        endMenuMusic.enabled = false;
+    }
+
+    public void ChangeVolume()
+    {
+        AudioListener.volume = volumeSlider.value;
     }
 
     void PlayClip(AudioClip clip, float volume)

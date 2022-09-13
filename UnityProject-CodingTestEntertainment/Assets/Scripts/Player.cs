@@ -15,7 +15,8 @@ namespace TriangleFactory
 		[SerializeField] Camera _camera;
 		[SerializeField] Transform _weaponLocation;
         [SerializeField] GameObject shotParticle;
-
+        [SerializeField] GameObject impactDecal;
+ 
         [SerializeField] float movementSpeed = 5f;
 
 		Weapon _weapon;
@@ -23,6 +24,8 @@ namespace TriangleFactory
         ScoreManager scoreManagerScript;
         AudioManager audioManagerScript;
         UIManager uiManagerScript;
+
+        RaycastHit hitInfo;
 
         bool equippedWeapon;
 
@@ -83,14 +86,18 @@ namespace TriangleFactory
 
             if (Physics.Raycast(GetRay(), out RaycastHit hit, float.MaxValue, targetLayerMask))
             {
+                hitInfo = hit;
                 hit.transform.gameObject.SetActive(false);
-                audioManagerScript.PlayTargetHitClip(); 
+                StartCoroutine(HitTargetDecal());
+
                 if (hit.transform.gameObject.tag == "Bomb")
                 {
+                    audioManagerScript.PlayBombHitClip();
                     scoreManagerScript.ModifyScore(pointsOnHitBomb);
                 }
                 else
                 {
+                    audioManagerScript.PlayTargetHitClip();
                     scoreManagerScript.ModifyScore(pointsOnHit);
                 }
             }
@@ -98,6 +105,14 @@ namespace TriangleFactory
             {
                 scoreManagerScript.ModifyScore(pointsOnMiss);
             }
+        }
+
+        IEnumerator HitTargetDecal()
+        {
+            var offset = new Vector3(0, .1f, 0);
+            var hitDecal = Instantiate(impactDecal, hitInfo.transform.position + offset, Quaternion.identity);
+            yield return new WaitForSeconds(1);
+            Destroy(hitDecal);
         }
 
         IEnumerator ShootParticleVFX()

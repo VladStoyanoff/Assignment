@@ -88,15 +88,4 @@ public class TargetManager : MonoBehaviour
             movingTargets[movingTargetIndex].gameObject.SetActive(false);
         }
     }
-
-    //void MaintainBombRequirements()
-    //{
-    //    var allBombsArray = GameObject.FindGameObjectsWithTag("Bomb");
-    //    if (allBombsArray.Length <= 2) return;
-    //    for (int i = 0; i < allBombsArray.Length - 2; i++)
-    //    {
-    //        var bombToRemove = allBombsArray[i + 2].gameObject;
-    //        Destroy(bombToRemove);
-    //    }
-    //}
 }
