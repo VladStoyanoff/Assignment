@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,7 @@ public class InputManager : MonoBehaviour
     PlayerInputAction playerInputAction;
     [SerializeField] GameObject panel;
     [SerializeField] GameObject mainCamera;
+
     bool paused;
 
     void Awake()

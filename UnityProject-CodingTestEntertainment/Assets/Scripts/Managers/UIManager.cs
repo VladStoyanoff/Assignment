@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using TriangleFactory;
 using System;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,8 +15,8 @@ public class UIManager : MonoBehaviour
     [Header("Timer")]
     float timerCountdownValue = 3f;
     float secondsBeforeStart = 3f;
-    float timerGameValue = 60f;
-    float secondsPerRound = 60f;
+    float timerGameValue = 10f;
+    float secondsPerRound = 10f;
     bool startedCountdown;
     bool startShooting;
 
@@ -26,11 +27,21 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI secondsCountdownText;
     [SerializeField] TextMeshProUGUI secondsPlayText;
     [SerializeField] TextMeshProUGUI goText;
+    [SerializeField] TextMeshProUGUI bestScoreText;
+
+    void Awake()
+    {
+        scoreManagerScript = FindObjectOfType<ScoreManager>();
+    }
 
     void Start()
     {
         Player.OnWeaponEquipped += PlayerScript_OnWeaponEquipped;
-        scoreManagerScript = FindObjectOfType<ScoreManager>();
+        if (SceneManager.GetActiveScene().buildIndex == 1) 
+        {
+            scoreManagerScript.LoadBestScore();
+        }
+        bestScoreText.text = "Best Score: " + scoreManagerScript.GetBestScore().ToString("000000000");
     }
 
     void Update()
@@ -39,6 +50,7 @@ public class UIManager : MonoBehaviour
         UpdateCountdownTimer();
         UpdateGameTimer();
     }
+
     void UpdateScore()
     {
         scoreText.text = scoreManagerScript.GetScore().ToString("000000000");
@@ -74,6 +86,7 @@ public class UIManager : MonoBehaviour
         else
         {
             startShooting = false;
+            scoreManagerScript.TrySaveBestScore();
             FindObjectOfType<LevelManager>().LoadEndMenu();
         }
     }

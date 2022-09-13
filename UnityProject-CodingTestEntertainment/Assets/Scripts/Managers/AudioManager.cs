@@ -26,6 +26,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioSource gameMusic;
     [SerializeField] AudioSource endMenuMusic;
 
+    bool muted;
+
     public static AudioManager Instance { get; private set; }
 
     void Awake()
@@ -77,6 +79,18 @@ public class AudioManager : MonoBehaviour
     public void ChangeVolume()
     {
         AudioListener.volume = volumeSlider.value;
+    }
+
+    public void Mute()
+    {
+        if (muted)
+        {
+            AudioListener.volume = volumeSlider.value;
+            muted = false;
+            return;
+        }
+        AudioListener.volume = 0;
+        muted = true;
     }
 
     void PlayClip(AudioClip clip, float volume)
