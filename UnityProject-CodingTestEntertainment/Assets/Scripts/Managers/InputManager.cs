@@ -28,8 +28,29 @@ public class InputManager : MonoBehaviour
             paused = !paused;
             panel.gameObject.SetActive(paused);
             mainCamera.GetComponent<FollowMouse>().enabled = !paused;
-            Cursor.lockState = CursorLockMode.None;
+            StopTime();
+            //CursorBehaviour();
         }
+    }
+
+    //void CursorBehaviour()
+    //{
+    //    if (Cursor.lockState == CursorLockMode.None)
+    //    {
+    //        Cursor.lockState = CursorLockMode.Locked;
+    //        return;
+    //    }
+    //    Cursor.lockState = CursorLockMode.None;
+    //}
+
+    void StopTime()
+    {
+        if (Time.timeScale == 0)
+        {
+            Time.timeScale = 1;
+            return;
+        }
+        Time.timeScale = 0;
     }
     public bool Interact() => playerInputAction.Player.Interact.WasPressedThisFrame();
     public bool Fire() => playerInputAction.Player.Fire.WasPressedThisFrame();

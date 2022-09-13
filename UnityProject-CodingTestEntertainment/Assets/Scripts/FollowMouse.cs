@@ -8,10 +8,10 @@ public class FollowMouse : MonoBehaviour
     float rotationUpDown = 0f;
     float rotationLeftRight = 0f;
 
-    void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
+    //void Start()
+    //{
+    //    Cursor.lockState = CursorLockMode.Locked;
+    //}
 
     void Update()
     {
@@ -20,8 +20,8 @@ public class FollowMouse : MonoBehaviour
 
         rotationLeftRight -= y;
         rotationUpDown += x;
-        rotationUpDown = Mathf.Clamp(rotationUpDown, -90f, 90f);
-        rotationLeftRight = Mathf.Clamp(rotationLeftRight, -90f, 90f);
+        rotationUpDown = Mathf.Clamp(rotationUpDown, -45f, 45f);
+        rotationLeftRight = Mathf.Clamp(rotationLeftRight, -45f, 45f);
 
         transform.localRotation = Quaternion.Euler(rotationLeftRight, rotationUpDown, 0f);
     }

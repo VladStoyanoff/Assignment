@@ -13,11 +13,13 @@ public class TargetManager : MonoBehaviour
     GameObject[] movingTargets;
     GameObject[] targetsArray;
 
+    [SerializeField] MeshFilter tntMesh;
+    [SerializeField] Material tntMaterial;
+
     UIManager UIManagerScript;
 
     bool IsRunningS;
     bool IsRunningM;
-    float movingMultiplier;
 
 
     void Awake()
@@ -59,10 +61,12 @@ public class TargetManager : MonoBehaviour
         IsRunningS = true;
         var stationaryTargetIndex = UnityEngine.Random.Range(0, stationaryTargets.Length);
         stationaryTargets[stationaryTargetIndex].gameObject.SetActive(true);
-        var randomTNT = UnityEngine.Random.Range(4, 20);
-        if (randomTNT <= 4)
+        var randomTNT = UnityEngine.Random.Range(0, 20);
+        if (randomTNT <= 5)
         {
-            stat
+            stationaryTargets[stationaryTargetIndex].GetComponent<MeshFilter>().sharedMesh = tntMesh.sharedMesh;
+            stationaryTargets[stationaryTargetIndex].GetComponent<MeshRenderer>().material = tntMaterial;
+            stationaryTargets[stationaryTargetIndex].gameObject.tag = "Bomb";
         }
         yield return new WaitForSeconds(UnityEngine.Random.Range(2, 10));
         stationaryTargets[stationaryTargetIndex].gameObject.SetActive(false);

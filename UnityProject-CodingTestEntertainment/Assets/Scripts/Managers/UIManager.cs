@@ -19,6 +19,8 @@ public class UIManager : MonoBehaviour
     bool startedCountdown;
     bool startShooting;
 
+    ScoreManager scoreManagerScript;
+
     [SerializeField] Image countdownImage;
     [SerializeField] Image gameTimerImage;
     [SerializeField] TextMeshProUGUI secondsCountdownText;
@@ -28,6 +30,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         Player.OnWeaponEquipped += PlayerScript_OnWeaponEquipped;
+        scoreManagerScript = FindObjectOfType<ScoreManager>();
     }
 
     void Update()
@@ -38,7 +41,7 @@ public class UIManager : MonoBehaviour
     }
     void UpdateScore()
     {
-        scoreText.text = FindObjectOfType<ScoreManager>().GetScore().ToString("000000000");
+        scoreText.text = scoreManagerScript.GetScore().ToString("000000000");
     }
 
     void UpdateCountdownTimer()
@@ -71,8 +74,8 @@ public class UIManager : MonoBehaviour
         else
         {
             startShooting = false;
+            FindObjectOfType<LevelManager>().LoadEndMenu();
         }
-
     }
 
     IEnumerator TurnOffCountdownElements()
@@ -89,7 +92,10 @@ public class UIManager : MonoBehaviour
     void PlayerScript_OnWeaponEquipped(object sender, EventArgs e)
     {
         startedCountdown = true;
-        countdownImage.gameObject.SetActive(true);
+        if (countdownImage != null)
+        {
+            countdownImage.gameObject.SetActive(true);
+        }
     }
 
     public bool GetStartShootingBool() => startShooting;

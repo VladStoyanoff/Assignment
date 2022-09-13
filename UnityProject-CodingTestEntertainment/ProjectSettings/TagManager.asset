@@ -6,6 +6,8 @@ TagManager:
   tags:
   - StationaryTarget
   - MovingTarget
+  - Bomb
+  - EndPoint
   layers:
   - Default
   - TransparentFX

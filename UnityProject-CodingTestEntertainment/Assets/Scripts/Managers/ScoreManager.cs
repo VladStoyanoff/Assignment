@@ -5,20 +5,18 @@ using UnityEngine;
 public class ScoreManager : MonoBehaviour
 {
     private int currentScore;
-    static ScoreManager instance;
+
+    public static ScoreManager Instance { get; private set; }
 
     void Awake()
     {
-        if (instance != null)
+        if (Instance != null)
         {
-            gameObject.SetActive(false);
+            Debug.LogError("There's more than one ScoreManager! " + transform + " - " + Instance);
             Destroy(gameObject);
+            return;
         }
-        else
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+        Instance = this;
     }
 
     public void ResetScore()
@@ -29,7 +27,7 @@ public class ScoreManager : MonoBehaviour
     public void ModifyScore(int score)
     {
         currentScore += score;
-        Mathf.Clamp(score, 0, int.MaxValue);
+        currentScore = Mathf.Clamp(currentScore, 0, int.MaxValue);
     }
 
     public int GetScore() => currentScore;

@@ -20,12 +20,16 @@ public class LevelManager : MonoBehaviour
 
     public void LoadSaloon()
     {
-        FindObjectOfType<ScoreManager>().ResetScore();
         SceneManager.LoadScene(1);
     }
 
-    public void LoadMainMenu()
+    public void ReloadScene()
     {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 
+    public void LoadEndMenu()
+    {
+        SceneManager.LoadScene(2);
     }
 }

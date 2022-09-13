@@ -19,6 +19,9 @@ public class TargetMoveLaterally : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        randomMultiplier = Random.Range(-1f, 1f);
+        if (other.transform.tag == "EndPoint")
+        {
+            speed = -speed;
+        }
     }
 }
