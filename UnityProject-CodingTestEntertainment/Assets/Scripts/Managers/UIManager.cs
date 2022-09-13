@@ -15,8 +15,8 @@ public class UIManager : MonoBehaviour
     [Header("Timer")]
     float timerCountdownValue = 3f;
     float secondsBeforeStart = 3f;
-    float timerGameValue = 10f;
-    float secondsPerRound = 10f;
+    float timerGameValue = 60f;
+    float secondsPerRound = 60f;
     bool startedCountdown;
     bool startShooting;
 
