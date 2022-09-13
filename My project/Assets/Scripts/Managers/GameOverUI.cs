@@ -9,7 +9,6 @@ public class GameOverUI : MonoBehaviour
 
     void Start()
     {
-        Debug.Log(FindObjectOfType<ScoreManager>().GetScore());
         Cursor.lockState = CursorLockMode.None;
         scoreText.text = "You Scored:\n" + FindObjectOfType<ScoreManager>().GetScore();
     }
