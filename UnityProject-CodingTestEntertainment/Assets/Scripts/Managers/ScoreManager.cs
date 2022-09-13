@@ -28,6 +28,11 @@ public class ScoreManager : MonoBehaviour
         currentScore = Mathf.Clamp(currentScore, 0, int.MaxValue);
     }
 
+    public void ClearScore()
+    {
+        currentScore = 0;
+    }
+
     [System.Serializable]
     class SaveData
     {

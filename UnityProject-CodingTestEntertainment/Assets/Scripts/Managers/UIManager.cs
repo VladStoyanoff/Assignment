@@ -42,6 +42,7 @@ public class UIManager : MonoBehaviour
             scoreManagerScript.LoadBestScore();
         }
         bestScoreText.text = "Best Score: " + scoreManagerScript.GetBestScore().ToString("000000000");
+        scoreManagerScript.ClearScore();
     }
 
     void Update()
