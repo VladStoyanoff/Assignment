@@ -16,6 +16,11 @@ public class InputManager : MonoBehaviour
         playerInputAction.Player.Enable();
     }
 
+    void Start()
+    {
+        Time.timeScale = 1;
+    }
+
     void Update()
     {
         PauseGame();
@@ -29,19 +34,19 @@ public class InputManager : MonoBehaviour
             panel.gameObject.SetActive(paused);
             mainCamera.GetComponent<FollowMouse>().enabled = !paused;
             StopTime();
-            //CursorBehaviour();
+            CursorBehaviour();
         }
     }
 
-    //void CursorBehaviour()
-    //{
-    //    if (Cursor.lockState == CursorLockMode.None)
-    //    {
-    //        Cursor.lockState = CursorLockMode.Locked;
-    //        return;
-    //    }
-    //    Cursor.lockState = CursorLockMode.None;
-    //}
+    void CursorBehaviour()
+    {
+        if (Cursor.lockState == CursorLockMode.None)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            return;
+        }
+        Cursor.lockState = CursorLockMode.None;
+    }
 
     void StopTime()
     {

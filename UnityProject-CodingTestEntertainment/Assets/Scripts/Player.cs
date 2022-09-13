@@ -22,9 +22,9 @@ namespace TriangleFactory
         InputManager inputManagerScript;
         ScoreManager scoreManagerScript;
         AudioManager audioManagerScript;
+        UIManager uiManagerScript;
 
         bool equippedWeapon;
-        bool countingDown;
 
         float timeSinceLastShot = Mathf.Infinity;
         float reloadTime = .5f;
@@ -38,6 +38,7 @@ namespace TriangleFactory
             inputManagerScript = FindObjectOfType<InputManager>();
             scoreManagerScript = FindObjectOfType<ScoreManager>();
             audioManagerScript = FindObjectOfType<AudioManager>();
+            uiManagerScript = FindObjectOfType<UIManager>();
         }
 
         void Update()
@@ -66,23 +67,16 @@ namespace TriangleFactory
             _weapon.transform.localRotation = Quaternion.identity;
             equippedWeapon = true;
             OnWeaponEquipped?.Invoke(this, EventArgs.Empty);
-            SwitchCountingDownBool();
             FindObjectOfType<TargetManager>().DisableTargets();
-        }
-
-        public void SwitchCountingDownBool()
-        {
-            countingDown = !countingDown;
         }
 
         void TryShoot()
         {
-            if (countingDown) return;
+            if (uiManagerScript.GetStartShootingBool() == false) return;
             if (inputManagerScript.Fire() == false) return;
             if (equippedWeapon == false) return;
             if (timeSinceLastShot < reloadTime) return;
 
-            _weapon.Shoot();
             timeSinceLastShot = 0;
             audioManagerScript.PlayShootingClip();
             StartCoroutine(ShootParticleVFX());
@@ -117,7 +111,7 @@ namespace TriangleFactory
 
         void UpdatePlayerPositionAndRotation()
         {
-            if (FindObjectOfType<UIManager>().GetStartShootingBool()) return;
+            if (uiManagerScript.GetStartShootingBool()) return;
             var positionVector = Vector3.zero;
             var xRestriction = 1.6f;
             positionVector.x = inputManagerScript.Movement();

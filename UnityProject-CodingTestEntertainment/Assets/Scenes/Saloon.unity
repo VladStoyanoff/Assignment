@@ -3146,6 +3146,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1878170773}
   m_CullTransparentMesh: 1
+--- !u!1 &1893085861 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 651240606532184629, guid: edd811c5214b56440b6786598d2e4da1, type: 3}
+  m_PrefabInstance: {fileID: 651240607356960525}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1893085865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1893085861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1441e44043463174caa311e9cfe85669, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1979745997
 GameObject:
   m_ObjectHideFlags: 0

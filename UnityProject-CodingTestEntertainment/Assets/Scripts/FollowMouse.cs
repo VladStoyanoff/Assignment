@@ -8,10 +8,10 @@ public class FollowMouse : MonoBehaviour
     float rotationUpDown = 0f;
     float rotationLeftRight = 0f;
 
-    //void Start()
-    //{
-    //    Cursor.lockState = CursorLockMode.Locked;
-    //}
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
 
     void Update()
     {

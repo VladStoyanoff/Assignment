@@ -86,7 +86,6 @@ public class UIManager : MonoBehaviour
         countdownImage.gameObject.SetActive(false);
         startedCountdown = false;
         startShooting = true;
-        FindObjectOfType<Player>().SwitchCountingDownBool();
     }
 
     void PlayerScript_OnWeaponEquipped(object sender, EventArgs e)
