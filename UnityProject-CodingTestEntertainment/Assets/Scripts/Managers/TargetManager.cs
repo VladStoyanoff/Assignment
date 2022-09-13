@@ -18,10 +18,6 @@ public class TargetManager : MonoBehaviour
 
     UIManager UIManagerScript;
 
-    bool IsRunningS;
-    bool IsRunningM;
-
-
     void Awake()
     {
         UIManagerScript = FindObjectOfType<UIManager>();
@@ -37,10 +33,11 @@ public class TargetManager : MonoBehaviour
     void Update()
     {
         if (UIManagerScript.GetStartShootingBool() == false) return;
-        if (IsRunningS) return;
-        StartCoroutine(UpdateStationaryTargets());
-        if (IsRunningM) return;
-        StartCoroutine(UpdateMovingTargets());
+        while (GameObject.FindGameObjectsWithTag("StationaryTarget").Length + GameObject.FindGameObjectsWithTag("MovingTarget").Length < 4)
+        {
+            StartCoroutine(UpdateStationaryTargets());
+            StartCoroutine(UpdateMovingTargets());
+        }
     }
 
     public void DisableTargets()
@@ -58,28 +55,48 @@ public class TargetManager : MonoBehaviour
 
     IEnumerator UpdateStationaryTargets()
     {
-        IsRunningS = true;
         var stationaryTargetIndex = UnityEngine.Random.Range(0, stationaryTargets.Length);
         stationaryTargets[stationaryTargetIndex].gameObject.SetActive(true);
         var randomTNT = UnityEngine.Random.Range(0, 20);
-        if (randomTNT <= 5)
+        if (randomTNT <= 5 && GameObject.FindGameObjectsWithTag("Bomb").Length < 1)
         {
             stationaryTargets[stationaryTargetIndex].GetComponent<MeshFilter>().sharedMesh = tntMesh.sharedMesh;
             stationaryTargets[stationaryTargetIndex].GetComponent<MeshRenderer>().material = tntMaterial;
             stationaryTargets[stationaryTargetIndex].gameObject.tag = "Bomb";
         }
         yield return new WaitForSeconds(UnityEngine.Random.Range(2, 10));
-        stationaryTargets[stationaryTargetIndex].gameObject.SetActive(false);
-        IsRunningS = false;
+        if (stationaryTargets[stationaryTargetIndex] != null)
+        {
+            stationaryTargets[stationaryTargetIndex].gameObject.SetActive(false);
+        }
     }
 
     IEnumerator UpdateMovingTargets()
     {
-        IsRunningM = true;
         var movingTargetIndex = UnityEngine.Random.Range(0, movingTargets.Length);
         movingTargets[movingTargetIndex].gameObject.SetActive(true);
+        var randomTNT = UnityEngine.Random.Range(0, 20);
+        if (randomTNT <= 5 && GameObject.FindGameObjectsWithTag("Bomb").Length < 1)
+        {
+            movingTargets[movingTargetIndex].GetComponent<MeshFilter>().sharedMesh = tntMesh.sharedMesh;
+            movingTargets[movingTargetIndex].GetComponent<MeshRenderer>().material = tntMaterial;
+            movingTargets[movingTargetIndex].gameObject.tag = "Bomb";
+        }
         yield return new WaitForSeconds(UnityEngine.Random.Range(2, 10));
-        movingTargets[movingTargetIndex].gameObject.SetActive(false);
-        IsRunningM = false;
+        if (movingTargets[movingTargetIndex] != null)
+        {
+            movingTargets[movingTargetIndex].gameObject.SetActive(false);
+        }
     }
+
+    //void MaintainBombRequirements()
+    //{
+    //    var allBombsArray = GameObject.FindGameObjectsWithTag("Bomb");
+    //    if (allBombsArray.Length <= 2) return;
+    //    for (int i = 0; i < allBombsArray.Length - 2; i++)
+    //    {
+    //        var bombToRemove = allBombsArray[i + 2].gameObject;
+    //        Destroy(bombToRemove);
+    //    }
+    //}
 }
