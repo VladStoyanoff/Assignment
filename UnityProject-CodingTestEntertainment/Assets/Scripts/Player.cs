@@ -8,16 +8,22 @@ namespace TriangleFactory
         public static event EventHandler OnWeaponEquipped;
 
         [SerializeField] LayerMask _interactionMask;
+        [SerializeField] LayerMask targetLayerMask;
 		[SerializeField] Camera _camera;
+        [SerializeField] GameObject muzzleLocation;
 		[SerializeField] Transform _weaponLocation;
 
         [SerializeField] float movementSpeed = 5f;
 
 		Weapon _weapon;
         InputManager inputManagerScript;
+        ScoreManager scoreManagerScript;
 
         bool equippedWeapon;
         bool countingDown;
+
+        int pointsOnMiss = -100;
+        int pointsOnHit = 1000;
 
         const float Radius = 1f;
 		const float FireDistance = 50.0f;
@@ -26,6 +32,7 @@ namespace TriangleFactory
         void Awake()
         {
             inputManagerScript = FindObjectOfType<InputManager>();
+            scoreManagerScript = FindObjectOfType<ScoreManager>();
         }
 
         void Update()
@@ -71,14 +78,21 @@ namespace TriangleFactory
             if (equippedWeapon == false) return;
 
             _weapon.Shoot();
-            var start = _camera.transform.position;
-            var direction = transform.forward;
-#if DEBUG
-            Debug.DrawRay(start, direction * FireDistance, Color.red, 1.0f);
-#endif
-            if (Physics.Raycast(start, direction, FireDistance) == false) return;
-            Debug.Log("HIT");
+
+            if (Physics.Raycast(GetRay(), out RaycastHit hit, float.MaxValue, targetLayerMask))
+            {
+                hit.transform.gameObject.SetActive(false);
+                FindObjectOfType<ScoreManager>().ModifyScore(pointsOnHit);
+                Debug.Log("HIT");
+            }
+
+            else
+            {
+                scoreManagerScript.ModifyScore(pointsOnMiss);
+            }
         }
+
+        Ray GetRay() => new Ray(_camera.transform.position, _camera.transform.forward);
 
         void UpdatePlayerPositionAndRotation()
         {
@@ -88,10 +102,6 @@ namespace TriangleFactory
             transform.position += positionVector * movementSpeed * Time.deltaTime;
             var restrictedPosition = Mathf.Clamp(transform.position.x, -xRestriction, xRestriction);
             transform.position = new Vector3(restrictedPosition, 0, -2);
-
-            //var yRestrictions = 50f;
-            //var yRestrictionsClamped = Mathf.Clamp(transform.rotation.y, -yRestrictions, yRestrictions);
-            //transform.rotation = Quaternion.Euler(0, yRestrictionsClamped, 0);
         }
     }
 }

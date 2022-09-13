@@ -59,6 +59,11 @@ public class TargetManager : MonoBehaviour
         IsRunningS = true;
         var stationaryTargetIndex = UnityEngine.Random.Range(0, stationaryTargets.Length);
         stationaryTargets[stationaryTargetIndex].gameObject.SetActive(true);
+        var randomTNT = UnityEngine.Random.Range(4, 20);
+        if (randomTNT <= 4)
+        {
+            stat
+        }
         yield return new WaitForSeconds(UnityEngine.Random.Range(2, 10));
         stationaryTargets[stationaryTargetIndex].gameObject.SetActive(false);
         IsRunningS = false;

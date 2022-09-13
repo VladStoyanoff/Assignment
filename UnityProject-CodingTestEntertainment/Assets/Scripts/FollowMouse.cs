@@ -6,8 +6,7 @@ public class FollowMouse : MonoBehaviour
 {
     float sensitivity = 200f;
     float rotationUpDown = 0f;
-
-    [SerializeField] Transform player;
+    float rotationLeftRight = 0f;
 
     void Start()
     {
@@ -19,10 +18,11 @@ public class FollowMouse : MonoBehaviour
         var x = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
         var y = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
 
-        rotationUpDown -= y;
+        rotationLeftRight -= y;
+        rotationUpDown += x;
         rotationUpDown = Mathf.Clamp(rotationUpDown, -90f, 90f);
-        transform.localRotation = Quaternion.Euler(rotationUpDown, 0f, 0f);
+        rotationLeftRight = Mathf.Clamp(rotationLeftRight, -90f, 90f);
 
-        player.Rotate(Vector3.up * x);
+        transform.localRotation = Quaternion.Euler(rotationLeftRight, rotationUpDown, 0f);
     }
 }

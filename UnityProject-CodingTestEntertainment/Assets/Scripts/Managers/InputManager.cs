@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
@@ -33,4 +34,5 @@ public class InputManager : MonoBehaviour
     public bool Interact() => playerInputAction.Player.Interact.WasPressedThisFrame();
     public bool Fire() => playerInputAction.Player.Fire.WasPressedThisFrame();
     public float Movement() => playerInputAction.Player.Movement.ReadValue<float>();
+    public Vector2 GetMouseScreenPosition() => Mouse.current.position.ReadValue();
 }

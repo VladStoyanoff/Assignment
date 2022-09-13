@@ -5,6 +5,7 @@ using UnityEngine;
 public class TargetMoveLaterally : MonoBehaviour
 {
     float randomMultiplier;
+    float speed = .01f;
 
     void Start()
     {
@@ -13,7 +14,7 @@ public class TargetMoveLaterally : MonoBehaviour
     void Update()
     {
         if (FindObjectOfType<UIManager>().GetStartShootingBool() == false) return;
-        transform.position += new Vector3(.01f * randomMultiplier, 0, 0);
+        transform.position += new Vector3(speed * randomMultiplier, 0, 0);
     }
 
     void OnTriggerEnter(Collider other)

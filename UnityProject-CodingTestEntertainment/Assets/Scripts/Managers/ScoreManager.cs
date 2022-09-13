@@ -30,7 +30,6 @@ public class ScoreManager : MonoBehaviour
     {
         currentScore += score;
         Mathf.Clamp(score, 0, int.MaxValue);
-        Debug.Log(currentScore);
     }
 
     public int GetScore() => currentScore;
